@@ -1,9 +1,12 @@
 package com.example.app_votacion.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
+import android.text.InputType;
 import android.widget.*;
 import android.view.*;
 
@@ -18,9 +21,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     private Urna urna;
-    private Button estudianteButton;
-    private Button adminButton;
-    private Button ayudaButton;
+    private Button estudianteButton, adminButton, ayudaButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,37 @@ public class MainActivity extends AppCompatActivity {
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirActividadAdmin();
+                // Crear un cuadro de diálogo para solicitar la contraseña
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Ingrese la contraseña");
+
+                // Crear un campo de texto para ingresar la contraseña
+                final EditText input = new EditText(MainActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+
+                // Manejar el evento de clic en el botón "Aceptar" del cuadro de diálogo
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Verificar si la contraseña ingresada es correcta
+                        String contraseña = input.getText().toString();
+                        if (contraseña.equals("tu_contraseña_correcta")) {
+                            abrirActividadAdmin();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                // Manejar el evento de clic en el botón "Cancelar" del cuadro de diálogo
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+
+                // Mostrar el cuadro de diálogo
+                builder.show();
             }
         });
 

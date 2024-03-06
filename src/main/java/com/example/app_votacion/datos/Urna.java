@@ -46,6 +46,10 @@ public class Urna implements Serializable {
         }
     }
 
+    public void vaciar(){
+        this.candidatos.clear();
+    }
+
     //OTROS METODOS
 
 }

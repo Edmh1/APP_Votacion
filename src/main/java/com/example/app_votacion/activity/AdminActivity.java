@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
 
-    private Button actualizarDatos, botonMenu;
+    private Button actualizarDatos, vaciarUrna, botonMenu;
     private Urna urna;
 
     @Override
@@ -31,6 +31,7 @@ public class AdminActivity extends AppCompatActivity {
 
         // Obtener referencias de los botones
         actualizarDatos = findViewById(R.id.ActualizarDatos);
+        vaciarUrna = findViewById(R.id.VaciarUrna);
         botonMenu = findViewById(R.id.Menu);
 
         // Manejar el evento click para el botón de "Menú"
@@ -48,6 +49,18 @@ public class AdminActivity extends AppCompatActivity {
                 mostrarCantidadVotos();
             }
         });
+
+        
+        // Elimina los votos almacenados
+        vaciarUrna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                urna.vaciar();
+                urna.initializarCandidatos();
+                urna.guardarUrna();
+            }
+        });
+
     }
 
     // Método para volver al MainActivity
@@ -60,15 +73,12 @@ public class AdminActivity extends AppCompatActivity {
     // Método para mostrar la cantidad de votos de cada candidato
     private void mostrarCantidadVotos() {
         List<Candidato> candidatos = urna.getCandidatos();
-
-        if (candidatos != null) {
-            for (Candidato candidato : candidatos) {
-                if (candidato != null) {
-                    int votos = candidato.getNvotostotales();
-                    TextView textViewVotos = obtenerTextViewPorTipoCandidato(candidato);
-                    if (textViewVotos != null) {
-                        textViewVotos.setText("Votos: " + votos);
-                    }
+        for (Candidato candidato : candidatos) {
+            if (candidato != null) {
+                int votos = candidato.getNvotostotales();
+                TextView textViewVotos = obtenerTextViewPorTipoCandidato(candidato);
+                if (textViewVotos != null) {
+                    textViewVotos.setText("Votos: " + votos);
                 }
             }
         }
@@ -104,6 +114,7 @@ public class AdminActivity extends AppCompatActivity {
         }
         return  0;
     }
+
 
 }
 
