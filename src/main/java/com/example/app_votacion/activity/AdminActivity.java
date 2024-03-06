@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app_votacion.R;
 import com.example.app_votacion.datos.Candidato;
+import com.example.app_votacion.datos.FileManager;
 import com.example.app_votacion.datos.Urna;
 
 import java.util.List;
@@ -25,13 +25,15 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_view);
 
-        urna = Urna.getInstance(getApplicationContext());
+        //Obtener Urna
+        urna = new Urna(this);
+        urna = FileManager.cargarUrna(urna.getRutaArchivo());
 
-        // Inicializar vistas
+        // Obtener referencias de los botones
         actualizarDatos = findViewById(R.id.ActualizarDatos);
         botonMenu = findViewById(R.id.Menu);
 
-        // Configurar el evento click para el botón de menú
+        // Manejar el evento click para el botón de "Menú"
         botonMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

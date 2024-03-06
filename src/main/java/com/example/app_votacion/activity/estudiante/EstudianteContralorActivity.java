@@ -10,31 +10,34 @@ import android.widget.Toast;
 
 import com.example.app_votacion.R;
 import com.example.app_votacion.activity.MainActivity;
-import com.example.app_votacion.datos.Candidato;
+import com.example.app_votacion.datos.FileManager;
 import com.example.app_votacion.datos.Urna;
 
 public class EstudianteContralorActivity extends AppCompatActivity {
-    private Button votarButton1, votarButton2, votoBlancoButton;
+    private Button votarButton1, votarButton2, votoBlancoButton, botonMenu;
 
     private String grado, curso;
 
+    private Urna urna;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estudiante_contralor);
 
-        // Obtener datos de la actividad anterior
+        //Obtener Urna
+        urna = new Urna(this);
+        urna = FileManager.cargarUrna(urna.getRutaArchivo());
+
+        // Obtener datos de la actividad de estudiante
         Intent intent = getIntent();
         grado = intent.getStringExtra("grado");
         curso = intent.getStringExtra("curso");
 
-        // Inicializar vistas
+        // Obtener referencias de botones
         votarButton1 = findViewById(R.id.buttonVotar1_contralor);
         votarButton2 = findViewById(R.id.buttonVotar2_contralor);
         votoBlancoButton = findViewById(R.id.buttonVotar_en_blanco);
-
-        // Obtener referencia al botón "Menu"
-        Button botonMenu = findViewById(R.id.Menu);
+        botonMenu = findViewById(R.id.Menu);
 
         // Manejar el evento de clic en el botón "Salir"
         botonMenu.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +53,8 @@ public class EstudianteContralorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto para el candidato 1 en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 1);
+                urna.registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 1);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudianteContralorActivity.this, "Voto registrado para Candidato 1", Toast.LENGTH_SHORT).show();
@@ -65,7 +69,8 @@ public class EstudianteContralorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto para el candidato 2 en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 2);
+                urna.registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 2);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudianteContralorActivity.this, "Voto registrado para Candidato 2", Toast.LENGTH_SHORT).show();
@@ -80,7 +85,8 @@ public class EstudianteContralorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto en blanco en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 3);
+                urna.registrarVoto("Contralor", Integer.parseInt(grado), Integer.parseInt(curso), 3);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudianteContralorActivity.this, "Voto en blanco registrado", Toast.LENGTH_SHORT).show();
@@ -90,7 +96,7 @@ public class EstudianteContralorActivity extends AppCompatActivity {
             }
         });
     }
-    // Método para volver al MainActivity
+
     private void volverAlMainActivity() {
         Intent intent = new Intent(EstudianteContralorActivity.this, MainActivity.class);
         startActivity(intent);

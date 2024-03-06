@@ -10,8 +10,10 @@ import android.view.*;
 
 import com.example.app_votacion.R;
 import com.example.app_votacion.activity.estudiante.EstudianteActivity;
-import com.example.app_votacion.activity.estudiante.EstudiantePersoneroActivity;
+import com.example.app_votacion.datos.FileManager;
 import com.example.app_votacion.datos.Urna;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,13 +27,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Obtener instancia de Urna desde el objeto App
-        urna = Urna.getInstance(getApplicationContext());
+        // Obtener Urna
+        urna = new Urna(this);
+        if(existenciaDeArchivo(urna.getRutaArchivo())){
+            urna = FileManager.cargarUrna(urna.getRutaArchivo());
+        }
+        else{
+            urna.initializarCandidatos();
+            urna.guardarUrna(); // Guarda la urna después de inicializar los candidatos
+        }
 
+        //Obtener referencias de botones
         estudianteButton = findViewById(R.id.Estudiante);
         adminButton = findViewById(R.id.Admin);
         ayudaButton = findViewById(R.id.Ayuda);
 
+        // Manejar el evento de clic en el botón "Estudiante"
         estudianteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,16 +50,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Manejar el evento de clic en el botón "Admin"
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 abrirActividadAdmin();
             }
         });
+
+        // Manejar el evento de clic en el botón "Ayuda"
         ayudaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //COMPLETAR
             }
         });
     }
@@ -62,5 +76,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public boolean existenciaDeArchivo(String ruta){
+        // Crear un objeto File con la ruta del archivo
+        File archivo = new File(ruta);
+
+        // Verificar si el archivo existe
+        if (archivo.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

@@ -10,17 +10,23 @@ import android.widget.Toast;
 
 import com.example.app_votacion.R;
 import com.example.app_votacion.activity.MainActivity;
+import com.example.app_votacion.datos.FileManager;
 import com.example.app_votacion.datos.Urna;
 
 public class EstudiantePersoneroActivity extends AppCompatActivity {
-    private Button votarButton1, votarButton2, votoBlancoButton;
+    private Button votarButton1, votarButton2, votoBlancoButton, botonMenu;
 
     private String grado, curso;
 
+    private Urna urna;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estudiante_personero);
+
+        //Obtener Urna
+        urna = new Urna(this);
+        urna = FileManager.cargarUrna(urna.getRutaArchivo());
 
         // Obtener datos de la actividad anterior
         Intent intent = getIntent();
@@ -33,7 +39,7 @@ public class EstudiantePersoneroActivity extends AppCompatActivity {
         votoBlancoButton = findViewById(R.id.buttonVotar_en_blanco);
 
         // Obtener referencia al botón "Menu"
-        Button botonMenu = findViewById(R.id.Menu);
+        botonMenu = findViewById(R.id.Menu);
 
         // Manejar el evento de clic en el botón "Salir"
         botonMenu.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +55,8 @@ public class EstudiantePersoneroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto para el candidato 1 en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 1);
+                urna.registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 1);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudiantePersoneroActivity.this, "Voto registrado para Candidato 1", Toast.LENGTH_SHORT).show();
@@ -64,7 +71,8 @@ public class EstudiantePersoneroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto para el candidato 2 en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 2);
+                urna.registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 2);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudiantePersoneroActivity.this, "Voto registrado para Candidato 2", Toast.LENGTH_SHORT).show();
@@ -79,7 +87,8 @@ public class EstudiantePersoneroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Guardar el voto en blanco en la urna
-                Urna.getInstance(getApplicationContext()).registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 3);
+                urna.registrarVoto("Personero", Integer.parseInt(grado), Integer.parseInt(curso), 3);
+                FileManager.guardarUrna(urna, urna.getRutaArchivo());
 
                 // Mostrar mensaje de éxito
                 Toast.makeText(EstudiantePersoneroActivity.this, "Voto en blanco registrado", Toast.LENGTH_SHORT).show();
@@ -89,12 +98,13 @@ public class EstudiantePersoneroActivity extends AppCompatActivity {
             }
         });
     }
+
     private void volverAlMainActivity() {
         Intent intent = new Intent(EstudiantePersoneroActivity.this, MainActivity.class);
         startActivity(intent);
         finish(); // Esto cierra la actividad actual para evitar que se acumulen en el stack
     }
-    // Método para ir al layout del Contralor
+
     private void irALayoutContralor() {
         Intent intent = new Intent(EstudiantePersoneroActivity.this, EstudianteContralorActivity.class);
         intent.putExtra("grado", grado);

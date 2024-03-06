@@ -2,66 +2,50 @@ package com.example.app_votacion.datos;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-public class Urna {
-    private static Urna instance;
-    private Context context;
-    private UrnaPreferences urnaPreferences;
+public class Urna implements Serializable {
     private List<Candidato> candidatos;
-    private boolean isInitialized;
+    private String rutaArchivo;
 
-    private Urna(Context context) {
-        this.context = context;
-        urnaPreferences = UrnaPreferences.getInstance(context);
-        isInitialized = false;
+    public Urna(Context context) {
+        this.candidatos = new ArrayList<>();
+        this.rutaArchivo = context.getFilesDir() + "/usuario.dat";
+    }
+    // Método para inicializar los candidatos sin guardar la urna
+    public void initializarCandidatos() {
+        this.candidatos = new ArrayList<>();
+        this.candidatos.add(new Personero(1));
+        this.candidatos.add(new Personero(2));
+        this.candidatos.add(new Personero(3)); //en blanco
+        this.candidatos.add(new Contralor(1));
+        this.candidatos.add(new Contralor(2));
+        this.candidatos.add(new Contralor(3)); //en blanco
     }
 
-    public static Urna getInstance(Context context) {
-        if (instance == null) {
-            synchronized (Urna.class) {
-                if (instance == null) {
-                    instance = new Urna(context);
-                }
-            }
-        }
-        return instance;
+    // Método para guardar la urna
+    public void guardarUrna() {
+        FileManager.guardarUrna(this, getRutaArchivo());
     }
 
-    public void initializeCandidatos() {
-        if (!isInitialized) {
-            if (urnaPreferences.getCandidatos().isEmpty()) {
-                candidatos = new ArrayList<>();
-                candidatos.add(new Personero(1));
-                candidatos.add(new Personero(2));
-                candidatos.add(new Personero(3)); //en blanco
-                candidatos.add(new Contralor(1));
-                candidatos.add(new Contralor(2));
-                candidatos.add(new Contralor(3)); //en blanco
+    public List<Candidato> getCandidatos() {
+        return candidatos;
+    }
 
-                // Guardar los candidatos en las preferencias compartidas
-                urnaPreferences.saveCandidatos(candidatos);
-            } else {
-                candidatos = urnaPreferences.getCandidatos();
-            }
-            isInitialized = true;
-        }
+    public String getRutaArchivo() {
+        return rutaArchivo;
     }
 
     public void registrarVoto(String tipo, int grado, int curso, int numero) {
-        initializeCandidatos(); // Ensure candidates are initialized before registering a vote
-
         for (Candidato candidato : candidatos) {
             if (candidato.getTipo().equals(tipo) && candidato.getNumero() == numero) {
                 candidato.registrarVoto(grado, curso);
                 break;
             }
         }
-        urnaPreferences.saveCandidatos(candidatos); // Guardar los cambios después de registrar el voto
     }
 
-    public List<Candidato> getCandidatos() {
-        initializeCandidatos(); // Ensure candidates are initialized before retrieving them
-        return candidatos;
-    }
+    //OTROS METODOS
+
 }

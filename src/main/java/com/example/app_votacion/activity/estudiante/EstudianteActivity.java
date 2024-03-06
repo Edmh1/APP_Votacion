@@ -21,13 +21,16 @@ public class EstudianteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estudiante);
 
+        //Obtener las referencias de los botones
         rgGrado = findViewById(R.id.rgGrado);
         rgCurso = findViewById(R.id.rgCurso);
         continuarButton = findViewById(R.id.Continuar);
 
+        //Manejador de evento "Continuar"
         continuarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Obtener valores de Grado y Curso del estudiante
                 int selectedGradoId = rgGrado.getCheckedRadioButtonId();
                 int selectedCursoId = rgCurso.getCheckedRadioButtonId();
 
