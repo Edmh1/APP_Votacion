@@ -146,8 +146,8 @@
 
                     <ImageView
                         android:id="@+id/imageView1_personero"
-                        android:layout_width="170dp"
-                        android:layout_height="153dp"
+                        android:layout_width="198dp"
+                        android:layout_height="177dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -222,8 +222,8 @@
 
                     <ImageView
                         android:id="@+id/imageView2_personero"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="195dp"
+                        android:layout_height="188dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
