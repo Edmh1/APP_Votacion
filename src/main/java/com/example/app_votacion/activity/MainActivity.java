@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private Urna urna;
     private Button estudianteButton, adminButton, ayudaButton;
 
+    private String contraseña = "edulamaria";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Verificar si la contraseña ingresada es correcta
-                        String contraseña = input.getText().toString();
-                        if (contraseña.equals("tu_contraseña_correcta")) {
+                        String contraseñausuario = input.getText().toString();
+                        if (contraseñausuario.equals(contraseña)) {
                             abrirActividadAdmin();
                         } else {
                             Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
