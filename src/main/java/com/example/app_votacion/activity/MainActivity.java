@@ -95,13 +95,17 @@ public class MainActivity extends AppCompatActivity {
         ayudaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //COMPLETAR
+                abrirActividadAyuda();
             }
         });
     }
 
     private void abrirSeleccionCursoGrado() {
         Intent intent = new Intent(MainActivity.this, EstudianteActivity.class);
+        startActivity(intent);
+    }
+    private void abrirActividadAyuda() {
+        Intent intent = new Intent(MainActivity.this, AyudaActivity.class);
         startActivity(intent);
     }
     private void abrirActividadAdmin() {
